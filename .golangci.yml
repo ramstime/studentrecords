@@ -1,0 +1,76 @@
+# This file contains all available configuration options
+# with their default values.
+
+# options for analysis running
+run:
+  # timeout for analysis, e.g. 30s, 5m, default is 1m
+  timeout: 2m
+  tests: false
+
+# output configuration options
+output:
+  # colored-line-number|line-number|json|tab|checkstyle|code-climate, default is "colored-line-number"
+  format: colored-line-number
+
+linters:
+  disable-all: true
+  enable:
+  - deadcode
+  - dupl
+  - errcheck
+  - goconst
+  - gocyclo
+  - gofmt
+  - goimports
+  - golint
+  - gosec
+  - gosimple
+  - govet
+  - ineffassign
+  - interfacer
+  - lll
+  - maligned
+  - misspell
+  - nakedret
+  - prealloc
+  - scopelint
+  - staticcheck
+  - structcheck
+  - typecheck
+  - unconvert
+  - unparam
+  - unused
+  - varcheck
+
+linters-settings:
+  gofmt:
+    # simplify code: gofmt with `-s` option, true by default
+    simplify: true
+  gocyclo:
+    min-complexity: 20
+  gosec:
+      excludes: ["G107"]
+        
+
+issues:
+  # Independently from option `exclude` we use default exclude patterns,
+  # it can be disabled by this option. To list all
+  # excluded by default patterns execute `golangci-lint run --help`.
+  # Default value for this option is true.
+  exclude-use-default: false
+
+  # Maximum issues count per one linter. Set to 0 to disable. Default is 50.
+  max-issues-per-linter: 0
+
+  # Maximum count of issues with the same text. Set to 0 to disable. Default is 3.
+  max-same-issues: 0
+  exclude-rules:
+    - linters: [errcheck]
+      text: "Error return value of .((os\\.)?std(out|err)\\..*|.*Close|.*Flush|os\\.Remove(All)?|.*printf?|os\\.(Un)?Setenv). is not checked"
+    - linters:
+        - lll
+      source: "^//"
+    # Rule G107: complains if the http request is made with variable url
+    # variable url is needed for dynamically building webhook service url
+    - linters: [gosec]
+      text: "G107: "
